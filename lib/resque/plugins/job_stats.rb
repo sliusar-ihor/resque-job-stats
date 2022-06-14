@@ -6,17 +6,15 @@ require 'resque/plugins/job_stats/duration'
 require 'resque/plugins/job_stats/timeseries'
 require 'resque/plugins/job_stats/statistic'
 require 'resque/plugins/job_stats/history'
+require 'resque/plugins/job_stats/memory_usage'
 
 module Resque
   module Plugins
     module JobStats
-      include Resque::Plugins::JobStats::Performed
       include Resque::Plugins::JobStats::Enqueued
-      include Resque::Plugins::JobStats::Failed
       include Resque::Plugins::JobStats::Duration
-      include Resque::Plugins::JobStats::Timeseries::Enqueued
-      include Resque::Plugins::JobStats::Timeseries::Performed
       include Resque::Plugins::JobStats::History
+      include Resque::Plugins::JobStats::MemoryUsage
 
       def self.extended(base)
         self.measured_jobs << base

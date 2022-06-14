@@ -1,32 +1,74 @@
+
+<style>
+    .fixTableHead {
+        overflow-y: auto;
+        height: 500px;
+    }
+    .fixTableHead thead th {
+        position: sticky;
+        top: 0;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th,
+    td {
+        padding: 8px 15px;
+        border: 2px solid #529432;
+    }
+    th {
+        background: #ABDD93;
+    }
+</style>
+
 <h1>Resque Job Stats</h1>
 
 <p class="intro">
   This page displays statistics about jobs that have been executed.
 </p>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <%= stat_header(:jobs_enqueued) %>
-    <%= stat_header(:jobs_performed) %>
-    <%= stat_header(:jobs_failed) %>
-    <%= stat_header(:job_rolling_avg) %>
-    <%= stat_header(:longest_job) %>
-  </tr>
-  <% @jobs.each do |job| %>
-    <tr>
-      <td>
-        <%= job.name %>
-        <% if job.job_class <= Resque::Plugins::JobStats::History ||
+<div class="fixTableHead">
+    <table>
+      <thead class="fixedHeader">
+        <tr>
+          <th>Name</th>
+          <%= stat_header(:jobs_enqueued) %>
+          <%= stat_header(:jobs_performed_day) %>
+          <%= stat_header(:jobs_performed_month) %>
+          <%= stat_header(:job_rolling_avg_day) %>
+          <%= stat_header(:job_rolling_avg_month) %>
+          <%= stat_header(:longest_job_day) %>
+          <%= stat_header(:longest_job_month) %>
+          <%= stat_header(:job_memory_usage_avg_day) %>
+          <%= stat_header(:job_memory_usage_avg_month) %>
+          <%= stat_header(:peak_memory_usage_day) %>
+          <%= stat_header(:peak_memory_usage_month) %>
+        </tr>
+      </thead>
+      <tbody class="scrollContent">
+        <% @jobs.each do |job| %>
+        <tr>
+          <td>
+            <%= job.name %>
+            <% if job.job_class <= Resque::Plugins::JobStats::History ||
               job.job_class.is_a?(Resque::Plugins::JobStats::History) %>
-          <a href='<%= url "/job_history/#{job.name}" %>'>[history]</a>
-        <% end %>
-      </td>
-      <%= display_stat(job, :jobs_enqueued,   :number_display) %>
-      <%= display_stat(job, :jobs_performed,  :number_display) %>
-      <%= display_stat(job, :jobs_failed,     :number_display) %>
-      <%= display_stat(job, :job_rolling_avg, :time_display) %>
-      <%= display_stat(job, :longest_job,     :time_display) %>
-    </tr>
-  <% end %>
-</table>
+              <a href='<%= url "/job_history/#{job.name}" %>'>[history]</a>
+            <% end %>
+          </td>
+          <%= display_stat(job, :jobs_enqueued, :number_display) %>
+          <%= display_stat(job, :jobs_performed_day, :number_display) %>
+          <%= display_stat(job, :jobs_performed_month, :number_display) %>
+          <%= display_stat(job, :job_rolling_avg_day, :time_display) %>
+          <%= display_stat(job, :job_rolling_avg_month, :time_display) %>
+          <%= display_stat(job, :longest_job_day, :time_display) %>
+          <%= display_stat(job, :longest_job_month, :time_display) %>
+          <%= display_stat(job, :job_memory_usage_avg_day, :mb_display) %>
+          <%= display_stat(job, :job_memory_usage_avg_month, :mb_display) %>
+          <%= display_stat(job, :peak_memory_usage_day, :mb_display) %>
+          <%= display_stat(job, :peak_memory_usage_month, :mb_display) %>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+</div>

@@ -25,11 +25,15 @@ module Resque
           end
 
           def time_display(float)
-            float.zero? ? "" : ("%.2f" % float.to_s) + "s"
+            float.blank? ? "" : ("%.2f" % float.to_s) + "s"
           end
 
           def number_display(num)
-            num.zero? ? "" : num
+            num.blank? ? "" : num
+          end
+
+          def mb_display(num)
+            num.blank? ? "" : "#{num}MB"
           end
 
           def stat_header(stat_name)
